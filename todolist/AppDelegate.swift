@@ -9,8 +9,10 @@
 import UIKit
 import SKYKit
 
+public let ReceivedNotificationFromSkygaer = "ReceivedNotificationFromSkygaer"
+
 @UIApplicationMain
-class AppDelegate: UIResponder, UIApplicationDelegate {
+class AppDelegate: UIResponder, UIApplicationDelegate, SKYContainerDelegate {
 
     var window: UIWindow?
 
@@ -19,6 +21,20 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // Override point for customization after application launch.
         SKYContainer.defaultContainer().configAddress("YOUR-END-POINT")
         SKYContainer.defaultContainer().configureWithAPIKey("12345678901234567890123456789012")
+        // This will prompt the user for permission to send remote notification
+        application.registerUserNotificationSettings(UIUserNotificationSettings())
+        application.registerForRemoteNotifications()
+        
+        SKYContainer.defaultContainer().registerDeviceCompletionHandler { (deviceID, error) in
+            if error != nil {
+                print("Failed to register device: \(error)")
+                return
+            }
+            
+            // You should put subscription creation logic in the following method
+            // self.addSubscription(deviceID)
+        }
+        
         return true
     }
 
@@ -44,6 +60,14 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
     }
 
-
+    
+    func application(application: UIApplication, didRegisterForRemoteNotificationsWithDeviceToken deviceToken: NSData) {
+        print("Registered for Push notifications with token: \(deviceToken)");
+    }
+    
+    func container(container: SKYContainer!, didReceiveNotification notification: SKYNotification!) {
+        print("received notification = \(notification)");
+        NSNotificationCenter.defaultCenter().postNotificationName(ReceivedNotificationFromSkygaer, object: notification)
+    }
 }
 
