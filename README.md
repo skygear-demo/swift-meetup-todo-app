@@ -135,6 +135,8 @@ We will save the item as a `SKYRecord(recordType: "todo")`, and set it's value f
         self.presentViewController(alertController, animated: true, completion: nil)
     }
 
+```
+
 Now we can save the items to the cloud, even you log onto another device.
 [Download Project zip of Step 3](https://github.com/skygear-demo/swift-meetup-todo-app/archive/step3.zip)
 
@@ -173,8 +175,7 @@ Then we need to delete the item in the tableview.
             print("Editing \(editingStyle)")
         }
     }
-    
-	```
+```
 
 ## Edit items
 
@@ -219,7 +220,7 @@ func application(application: UIApplication, didFinishLaunchingWithOptions launc
     
     return true
 }
-```
+    ```
 
 
 ```
