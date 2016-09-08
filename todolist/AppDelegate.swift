@@ -25,6 +25,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate, SKYContainerDelegate {
         application.registerUserNotificationSettings(UIUserNotificationSettings())
         application.registerForRemoteNotifications()
         
+        SKYContainer.defaultContainer().delegate = self
+        
         SKYContainer.defaultContainer().registerDeviceCompletionHandler { (deviceID, error) in
             if error != nil {
                 print("Failed to register device: \(error)")
