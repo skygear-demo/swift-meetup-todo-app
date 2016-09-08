@@ -17,11 +17,12 @@ class TodoTableViewController: UITableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        // Uncomment the following line to preserve selection between presentations
-        // self.clearsSelectionOnViewWillAppear = false
+        self.clearsSelectionOnViewWillAppear = false
 
-        // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
-        // self.navigationItem.rightBarButtonItem = self.editButtonItem()
+        self.navigationItem.leftBarButtonItem = self.editButtonItem()
+
+        let addButton = UIBarButtonItem(barButtonSystemItem: .Add, target: self, action: #selector(insertNewObject(_:)))
+        self.navigationItem.rightBarButtonItem = addButton
     }
 
     override func viewWillAppear(animated: Bool) {
@@ -48,6 +49,21 @@ class TodoTableViewController: UITableViewController {
             self.objects = results
             self.tableView.reloadData()
         }
+    }
+    
+    func insertNewObject(sender: AnyObject) {
+        let alertController = UIAlertController(title: "Add Todo item", message: nil, preferredStyle: .Alert)
+        alertController.addAction(UIAlertAction(title: "Cancel", style: .Cancel, handler: nil))
+        alertController.addAction(UIAlertAction(title: "Confirm", style: .Default, handler: { (action) in
+            
+            /*
+            // TODO: Implement Cloud save here
+            */
+        }))
+        alertController.addTextFieldWithConfigurationHandler { (textField) in
+            textField.placeholder = "Title"
+        }
+        self.presentViewController(alertController, animated: true, completion: nil)
     }
 
     // MARK: - Table view data source
