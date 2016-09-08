@@ -34,7 +34,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, SKYContainerDelegate {
             }
             
             // You should put subscription creation logic in the following method
-            // self.addSubscription(deviceID)
+            self.addSubscription(deviceID)
         }
         
         return true
@@ -70,6 +70,22 @@ class AppDelegate: UIResponder, UIApplicationDelegate, SKYContainerDelegate {
     func container(container: SKYContainer!, didReceiveNotification notification: SKYNotification!) {
         print("received notification = \(notification)");
         NSNotificationCenter.defaultCenter().postNotificationName(ReceivedNotificationFromSkygaer, object: notification)
+    }
+    
+    func addSubscription(deviceID: String) {
+        let query = SKYQuery(recordType: "todo", predicate: nil)
+        let subscription = SKYSubscription(query: query, subscriptionID: "my todos")
+        
+        let operation = SKYModifySubscriptionsOperation(deviceID: deviceID, subscriptionsToSave: [subscription])
+        operation.deviceID = deviceID
+        operation.modifySubscriptionsCompletionBlock = { (savedSubscriptions, operationError) in
+            dispatch_async(dispatch_get_main_queue()) {
+                if operationError != nil {
+                    print(operationError)
+                }
+            }
+        };
+        SKYContainer.defaultContainer().privateCloudDatabase.executeOperation(operation)
     }
 }
 
