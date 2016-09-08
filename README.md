@@ -220,7 +220,7 @@ func application(application: UIApplication, didFinishLaunchingWithOptions launc
     
     return true
 }
-    ```
+```
 
 
 ```
@@ -314,8 +314,4 @@ We now have a full-featured todo list app:
 You can download the complete project here: [Download Project zip of Step 5](https://github.com/skygear-demo/swift-meetup-todo-app/archive/step5.zip)
 
 
-
-
-
-
-
+Thanks :)
