@@ -21,6 +21,10 @@ class DetailViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        self.titleField.addTarget(self, action: #selector(self.titleFieldDidChange(_:)), forControlEvents: UIControlEvents.EditingDidEnd)
+        self.descField.addTarget(self, action: #selector(self.descFieldDidChange(_:)), forControlEvents: UIControlEvents.EditingDidEnd)
+        
         self.configureView()
 
         // Do any additional setup after loading the view.
@@ -41,6 +45,36 @@ class DetailViewController: UIViewController {
                 descLabel.text = detail.objectForKey("desc") as? String
             }
         }
+    }
+    
+    func titleFieldDidChange(textField: UITextView){
+        let title = textField.text
+        if let detail = detailItem as? SKYRecord {
+            detailItem?.setValue(title, forKey: "title")
+            SKYContainer.defaultContainer().privateCloudDatabase.saveRecord(detail, completion: { (record, error) in
+                if(error == nil) {
+                    NSLog("OK")
+                } else {
+                    print(error)
+                }
+            })
+        }
+        
+    }
+    
+    func descFieldDidChange(textField: UITextView){
+        let desc = textField.text
+        if let detail = detailItem as? SKYRecord {
+            detailItem?.setValue(desc, forKey: "desc")
+            SKYContainer.defaultContainer().privateCloudDatabase.saveRecord(detail, completion: { (record, error) in
+                if(error == nil) {
+                    NSLog("OK")
+                } else {
+                    print(error)
+                }
+            })
+        }
+        
     }
 
     /*
