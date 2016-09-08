@@ -1,0 +1,1 @@
+../../../SKYKit/Pod/Classes/SKYRecordSynchronizer.h
