@@ -16,7 +16,7 @@ It is easier to follow if we break down into mini steps, you can download the zi
 - Step2: Add Edit and "+" Button [Download zip](https://github.com/skygear-demo/swift-meetup-todo-app/archive/step2.zip)
 - Step3: Save todo items to the cloud [Download zip](https://github.com/skygear-demo/swift-meetup-todo-app/archive/step3.zip)
 - Step4: Add th detail UI, we can edit items now.[Download zip](https://github.com/skygear-demo/swift-meetup-todo-app/archive/step4.zip)
-- Step5: Final Project! With item sync without refresh. [Download zip](https://github.com/skygear-demo/swift-meetup-todo-app/archive/step0.zip)
+- Step5: Final Project! With item sync without refresh. [Download zip](https://github.com/skygear-demo/swift-meetup-todo-app/archive/step5.zip)
 
 
 
@@ -144,7 +144,7 @@ Now we can save the items to the cloud, even you log onto another device.
 
 ## Delete Items
 
-As we query `todo` items on the criteria `done==false`, so if we want to delete the item, we can just mark `donw` as `true`.
+As we query `todo` items on the criteria `done==false`, so if we want to delete the item, we can just mark `done` as `true`.
 
 Then we need to delete the item in the tableview.
 
