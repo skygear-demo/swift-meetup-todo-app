@@ -29,8 +29,6 @@ class ViewController: UIViewController {
     }
     
     func updateLoginStatus() {
-        self.usernameField.resignFirstResponder()
-        self.passwordField.resignFirstResponder()
         if ((SKYContainer.defaultContainer().currentUserRecordID) != nil) {
             loginStatusLabel.text = "Logged in"
             loginButton.enabled = false
@@ -52,9 +50,11 @@ class ViewController: UIViewController {
     }
 
     @IBAction func didTapLogin(sender: AnyObject) {
+        loginStatusLabel.text = "Loading..."
         SKYContainer.defaultContainer().loginWithUsername(usernameField.text, password: passwordField.text) { (user, error) in
             if (error != nil) {
                 self.showAlert(error)
+                self.updateLoginStatus()
                 return
             }
             NSLog("Logged in as: %@", user)
@@ -65,10 +65,11 @@ class ViewController: UIViewController {
     @IBAction func didTapSignup(sender: AnyObject) {
         self.usernameField.resignFirstResponder()
         self.passwordField.resignFirstResponder()
-        
+        loginStatusLabel.text = "Loading..."
         SKYContainer.defaultContainer().signupWithUsername(usernameField.text, password: passwordField.text) { (user, error) in
             if (error != nil) {
                 self.showAlert(error)
+                self.updateLoginStatus()
                 return
             }
             NSLog("Signed up as: %@", user)
@@ -77,9 +78,13 @@ class ViewController: UIViewController {
     }
     
     @IBAction func didTapLogout(sender: AnyObject) {
+        self.usernameField.resignFirstResponder()
+        self.passwordField.resignFirstResponder()
+        loginStatusLabel.text = "Loading..."
         SKYContainer.defaultContainer().logoutWithCompletionHandler { (user, error) in
             if (error != nil) {
                 self.showAlert(error)
+                self.updateLoginStatus()
                 return
             }
             NSLog("Logged out")
