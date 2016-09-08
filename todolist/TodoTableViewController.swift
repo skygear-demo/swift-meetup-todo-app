@@ -56,9 +56,23 @@ class TodoTableViewController: UITableViewController {
         alertController.addAction(UIAlertAction(title: "Cancel", style: .Cancel, handler: nil))
         alertController.addAction(UIAlertAction(title: "Confirm", style: .Default, handler: { (action) in
             
-            /*
-            // TODO: Implement Cloud save here
-            */
+            // Cloud save
+            let title = alertController.textFields![0].text
+            let todo = SKYRecord(recordType: "todo")
+            todo.setObject(title!, forKey: "title")
+            todo.setObject(SKYSequence(), forKey: "order")
+            todo.setObject(false, forKey: "done")
+            
+            self.privateDB.saveRecord(todo, completion: { (record, error) in
+                if (error != nil) {
+                    print("error saving todo: \(error)")
+                    return
+                }
+                
+                self.objects.insert(todo, atIndex: 0)
+                let indexPath = NSIndexPath(forRow: 0, inSection: 0)
+                self.tableView.insertRowsAtIndexPaths([indexPath], withRowAnimation: .Automatic)
+            })
         }))
         alertController.addTextFieldWithConfigurationHandler { (textField) in
             textField.placeholder = "Title"
