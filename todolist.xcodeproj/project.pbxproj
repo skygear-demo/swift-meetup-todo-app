@@ -14,6 +14,7 @@
 		607FACDD1AFB9204008FA782 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 607FACDC1AFB9204008FA782 /* Images.xcassets */; };
 		607FACEC1AFB9204008FA782 /* Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 607FACEB1AFB9204008FA782 /* Tests.swift */; };
 		632EB1E91D81009E00AF58E9 /* TodoTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 632EB1E81D81009E00AF58E9 /* TodoTableViewController.swift */; };
+		632EB1EB1D810BAF00AF58E9 /* DetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 632EB1EA1D810BAF00AF58E9 /* DetailViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -39,6 +40,7 @@
 		607FACEA1AFB9204008FA782 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		607FACEB1AFB9204008FA782 /* Tests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Tests.swift; sourceTree = "<group>"; };
 		632EB1E81D81009E00AF58E9 /* TodoTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TodoTableViewController.swift; sourceTree = "<group>"; };
+		632EB1EA1D810BAF00AF58E9 /* DetailViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DetailViewController.swift; sourceTree = "<group>"; };
 		B02851F36DBE81C00AAF3F45 /* Pods-todolist.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-todolist.release.xcconfig"; path = "Pods/Target Support Files/Pods-todolist/Pods-todolist.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -90,6 +92,7 @@
 				607FACDC1AFB9204008FA782 /* Images.xcassets */,
 				607FACD31AFB9204008FA782 /* Supporting Files */,
 				632EB1E81D81009E00AF58E9 /* TodoTableViewController.swift */,
+				632EB1EA1D810BAF00AF58E9 /* DetailViewController.swift */,
 			);
 			path = todolist;
 			sourceTree = "<group>";
@@ -290,6 +293,7 @@
 				607FACD81AFB9204008FA782 /* ViewController.swift in Sources */,
 				632EB1E91D81009E00AF58E9 /* TodoTableViewController.swift in Sources */,
 				607FACD61AFB9204008FA782 /* AppDelegate.swift in Sources */,
+				632EB1EB1D810BAF00AF58E9 /* DetailViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

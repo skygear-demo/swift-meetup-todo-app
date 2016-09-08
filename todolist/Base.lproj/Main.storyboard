@@ -140,6 +140,40 @@
             </objects>
             <point key="canvasLocation" x="-295" y="67"/>
         </scene>
+        <!--Detail View Controller-->
+        <scene sceneID="erJ-QR-Hzt">
+            <objects>
+                <viewController id="xYa-36-98s" customClass="DetailViewController" customModule="todolist" customModuleProvider="target" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="rAJ-yi-hOI"/>
+                        <viewControllerLayoutGuide type="bottom" id="htT-Cv-boD"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="474-Fr-oux">
+                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="fD0-NI-Xdc">
+                                <rect key="frame" x="20" y="93" width="247" height="30"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <textInputTraits key="textInputTraits"/>
+                            </textField>
+                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="3J3-5w-NT3">
+                                <rect key="frame" x="20" y="131" width="560" height="30"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <textInputTraits key="textInputTraits"/>
+                            </textField>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    </view>
+                    <connections>
+                        <outlet property="descField" destination="3J3-5w-NT3" id="qbs-jw-CR7"/>
+                        <outlet property="titleField" destination="fD0-NI-Xdc" id="Vcg-jy-HVe"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="Fym-X5-JZx" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1220" y="886"/>
+        </scene>
         <!--Todo item-->
         <scene sceneID="TGF-HK-qql">
             <objects>
@@ -156,6 +190,9 @@
                                     <rect key="frame" x="0.0" y="0.0" width="600" height="44"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                 </tableViewCellContentView>
+                                <connections>
+                                    <segue destination="xYa-36-98s" kind="show" identifier="showDetail" id="elk-DV-Opp"/>
+                                </connections>
                             </tableViewCell>
                         </prototypes>
                         <connections>
