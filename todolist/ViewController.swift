@@ -29,6 +29,8 @@ class ViewController: UIViewController {
     }
     
     func updateLoginStatus() {
+        self.usernameField.resignFirstResponder()
+        self.passwordField.resignFirstResponder()
         if ((SKYContainer.defaultContainer().currentUserRecordID) != nil) {
             loginStatusLabel.text = "Logged in"
             loginButton.enabled = false
@@ -61,6 +63,9 @@ class ViewController: UIViewController {
     }
     
     @IBAction func didTapSignup(sender: AnyObject) {
+        self.usernameField.resignFirstResponder()
+        self.passwordField.resignFirstResponder()
+        
         SKYContainer.defaultContainer().signupWithUsername(usernameField.text, password: passwordField.text) { (user, error) in
             if (error != nil) {
                 self.showAlert(error)
