@@ -1,48 +1,49 @@
 # Todo app guide
 
-This document is a guide on how to buld a TODO list app
+This document is a guide on how to buld a iOS TODO list app using Skygear with Swift. It contains the following features:
 
-* Basic signup / login
-* Add todo item
-* Edit the item
-* Sync items across devices
+* Basic user sign-up / login
+* Adding todo items
+* Editing todo items
+* Synchronizing items across devices
 
 ## Sample code
 
-It is easier to follow if we break down into mini steps, you can download the zip file for each step:
+We will break down the app development into 5 steps as listed below.
 
 - Step0: Initial Scaffolded project [Download zip](https://github.com/skygear-demo/swift-meetup-todo-app/archive/step0.zip)
-- Step1: Basic UI and show todo items in list [Download zip](https://github.com/skygear-demo/swift-meetup-todo-app/archive/step1.zip)
-- Step2: Add Edit and "+" Button [Download zip](https://github.com/skygear-demo/swift-meetup-todo-app/archive/step2.zip)
-- Step3: Save todo items to the cloud [Download zip](https://github.com/skygear-demo/swift-meetup-todo-app/archive/step3.zip)
-- Step4: Add th detail UI, we can edit items now.[Download zip](https://github.com/skygear-demo/swift-meetup-todo-app/archive/step4.zip)
-- Step5: Final Project! With item sync without refresh. [Download zip](https://github.com/skygear-demo/swift-meetup-todo-app/archive/step5.zip)
+- Step1: Basic UI and displaying todo items in a list [Download zip](https://github.com/skygear-demo/swift-meetup-todo-app/archive/step1.zip)
+- Step2: Adding "Edit" and "+" Button [Download zip](https://github.com/skygear-demo/swift-meetup-todo-app/archive/step2.zip)
+- Step3: Saving todo items to the cloud [Download zip](https://github.com/skygear-demo/swift-meetup-todo-app/archive/step3.zip)
+- Step4: Adding the item detail UI - we can edit items now [Download zip](https://github.com/skygear-demo/swift-meetup-todo-app/archive/step4.zip)
+- Step5: Synchronizing todo items without app refresh [Download zip](https://github.com/skygear-demo/swift-meetup-todo-app/archive/step5.zip)
 
+## Step 0: Scaffolding the iOS app with Skygear
 
+### Setting up the Skygear Server: Signup at portal.skygear.io
+1. You can [sign up](https://portal.skygear.io/signup) for the Skygear backend
+2. Under the "INFO" tab in the portal, you can obtain your Skygear server endpoint and the API Key. You will need them to connect your app to the server
 
-## Get the Server: Signup at portal.skygear.io
-1. [Sign up](https://portal.skygear.io/signup) for the Skygear backend
-2. Get Endpoint and API Key, you will need them to connect your app to the server
-
-## Scarffolding the app
-Open terminal and paste the following script:
+### Scaffolding the app
+Open terminal and execute the following command:
 
 `pod lib create --silent --template-url=https://github.com/SkygearIO/skygear-Scaffolding-iOS.git "SkygearTodoList"`
 
-- Answer the questions in Terminal
-- After running the script, you will get a scarffolding app with signup and login feature.
+- You will need to answer the questions as prompted
+- After running the script, a scarffolding app with signup and login features will be created.
 
-If you can't run the above script, you can also dowload the scarffolded project zip here: [Download Project zip of Step 0](https://github.com/skygear-demo/swift-meetup-todo-app/archive/step0.zip)
-
-
-## Signup and Login 
-
-Let's test the user authentication feature.
-
-If you downloaded the zip directly, you'll need to fill in the app end point and API Key info in the `AppDelegate.swift`.
+If you encounter problems in the above step, you can also download the scaffolded project zip here: [Download Project zip of Step 0](https://github.com/skygear-demo/swift-meetup-todo-app/archive/step0.zip)
 
 
-## Build Todo list UI
+### Testing the sign-up and login feature
+
+To ensure the iOS app has been set up properly, you can test signing up as a new user or logging in with an existing user. 
+
+If you downloaded the scaffolded zip directly, you will need to fill in the app endpoint and API Key info in the file `AppDelegate.swift`.
+
+## Step 1: Basic todo list UI
+
+### Creating the Todo list UI
 
 Then we will need to build the UI.
 
@@ -60,11 +61,11 @@ The Storyboard now should look like this:
 You can download the sample and see the how the project should look like here: [Download Project zip of Step 1](https://github.com/skygear-demo/swift-meetup-todo-app/archive/step1.zip)
 
 
-## Show the existing todo items in the tableview
+### Displaying the existing todo items in the tableview
 
-We will use a table view to show the todo items. Create a UITableViewController Class and name it `TodoTableViewController`.
+We will use a table view to show the todo items. Create a `UITableViewController` Class and name it `TodoTableViewController`.
 
-There are a few functions in `TodoTableViewController` we need to implement:
+There are a few functions in `TodoTableViewController` we will need to implement:
 
 `func numberOfSectionsInTableView(tableView: UITableView) -> Int`
 
@@ -75,37 +76,43 @@ There are a few functions in `TodoTableViewController` we need to implement:
 The implementation is already included in the Step 1: [Download Project zip of Step 1](https://github.com/skygear-demo/swift-meetup-todo-app/archive/step1.zip)
 
 
-## Add items via the add button
+## Step 2: Adding and editing todo items via the "Edit" and "Add" button
 
 We now wish to add 2 buttons: 
-1. Edit button, to edit or delete an item
-2. + button, to add button
+1. "Edit" button, to edit or delete an item
+2. "+" button, to add button
 
-Uncomment the Edit button to show the button.
+
+### "Edit" button
+
+You can uncomment the codes for the "Edit" button to show the button:
 
 ```
 // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
 // self.navigationItem.rightBarButtonItem = self.editButtonItem()
 ```
 
-Note that we wish the edit button on top left, so let's update the code: 
+Imagine we want to have the edit button on the top left instead of the right, you can change the line to:
+
 `self.navigationItem.leftBarButtonItem = self.editButtonItem()`
 
+### "Add" button
 
-Add a "Add" button
+To add the "Add" button, use the following code:
 
 ```
 let addButton = UIBarButtonItem(barButtonSystemItem: .Add, target: self, action: #selector(insertNewObject(_:)))
         self.navigationItem.rightBarButtonItem = addButton
 ```
+
 We now can see the buttons appear on the todo list page: [Download Project zip of Step 2](https://github.com/skygear-demo/swift-meetup-todo-app/archive/step2.zip)
 
 
-## Save to cloud when user insert a new item
+### Saving to todo items to the cloud when user adds a new item
 
-To save the record, we will implement the `insertNewObject()`
+To save the todo item record, we will implement the `insertNewObject()`
 
-We will save the item as a `SKYRecord(recordType: "todo")`, and set it's value for each key we wish to save. 
+We will save the item as a `SKYRecord(recordType: "todo")`, and set its value for each key we wish to save. 
 
 ```
     func insertNewObject(sender: AnyObject) {
@@ -137,16 +144,17 @@ We will save the item as a `SKYRecord(recordType: "todo")`, and set it's value f
 
 ```
 
-Now we can save the items to the cloud, even you log onto another device.
+Now every todo item will be saved to the cloud. You can retrieve them when logging in through another device.
 [Download Project zip of Step 3](https://github.com/skygear-demo/swift-meetup-todo-app/archive/step3.zip)
 
 
+## Step 4: Creating the details UI
 
-## Delete Items
+### Deleting Items
 
-As we query `todo` items on the criteria `done==false`, so if we want to delete the item, we can just mark `done` as `true`.
+As we query `todo` items on the criteria `done==false`, we can mark `done` as `true` in order to delete a todo item.
 
-Then we need to delete the item in the tableview.
+It can be achieved with the following code in the `tableView`.
 
 
 
@@ -177,9 +185,9 @@ Then we need to delete the item in the tableview.
     }
 ```
 
-## Edit items
+### Editing items
 
-Add a View Controller to the Storyboard, and create a `DetailViewController` class.
+To allow editing a todo item, we need to add a View Controller to the Storyboard, and create a `DetailViewController` class.
 
 We will add a view controller in the storyboard.
 
@@ -187,20 +195,21 @@ We will add a view controller in the storyboard.
 
 We only need two simple text fields in this view.
 
-Connect the segue from the cell in the `TodoTableViewController`, choose the `show` option. When user taps the cell, it will show the detail view.
+Connect the segue from the cell in the `TodoTableViewController`, and choose the `show` option. When the user taps the cell, it will show the detail view.
 
-In `DetailViewController.swift`, we will need to do 2 following things:
+In `DetailViewController.swift`, we will need to do the following two things:
 
 1. Fill in the data
-2. Listen for field change and save the record.
+2. Listen for field changes and save the record.
 
 
-We now can edit the items in the detail view and mark the item as deleted. You can download the sample project here: [Download Project zip of Step 4](https://github.com/skygear-demo/swift-meetup-todo-app/archive/step4.zip)
+We can now edit the items in the detail view and mark the item as deleted. You can download the sample project here: [Download Project zip of Step 4](https://github.com/skygear-demo/swift-meetup-todo-app/archive/step4.zip)
 
+## Step 5: Synchronizing the todo list
 
 ## Sync the todo list with query subscription
 
-We then will implement the data sync with Skygear query change subscription. It doesn't involve much code.
+We will implement the data synchronization using the Skygear query change subscription.
 
 The steps are:
 
@@ -284,7 +293,7 @@ func addSubscription(deviceID: String) {
 }
 ```
 
-In `TodoTableViewController`, let's tell the table iew controller to update the data when there is remote notifications. We do this in `viewDidLoad`.
+In `TodoTableViewController`, let's tell the table view controller to update the data when there is remote notifications. We will do this in `viewDidLoad`.
 
 ```
 override func viewDidLoad() {
@@ -298,18 +307,17 @@ override func viewDidLoad() {
 }
 ```
 
-You will be able to see the sync result in the demo project:
+You will be able to see the synchronization result in the demo project:
 [Download Project zip of Step 5](https://github.com/skygear-demo/swift-meetup-todo-app/archive/step5.zip)
 
 
 ## Done!
 We now have a full-featured todo list app:
 
-* Basic signup / login
-* Add todo item
-* Edit the item
-* Sync items across devices
-
+* Basic user sign-up / login
+* Adding todo items
+* Editing todo items
+* Synchronizing items across devices
 
 You can download the complete project here: [Download Project zip of Step 5](https://github.com/skygear-demo/swift-meetup-todo-app/archive/step5.zip)
 
