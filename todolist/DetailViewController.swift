@@ -22,8 +22,8 @@ class DetailViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        self.titleField.addTarget(self, action: #selector(self.titleFieldDidChange(_:)), forControlEvents: UIControlEvents.EditingDidEnd)
-        self.descField.addTarget(self, action: #selector(self.descFieldDidChange(_:)), forControlEvents: UIControlEvents.EditingDidEnd)
+        self.titleField.addTarget(self, action: #selector(self.titleFieldDidChange(_:)), for: UIControlEvents.editingDidEnd)
+        self.descField.addTarget(self, action: #selector(self.descFieldDidChange(_:)), for: UIControlEvents.editingDidEnd)
         
         self.configureView()
 
@@ -39,19 +39,19 @@ class DetailViewController: UIViewController {
         // Update the user interface for the detail item.
         if let detail = self.detailItem as? SKYRecord {
             if let titleLabel = self.titleField {
-                titleLabel.text = detail.objectForKey("title") as? String
+                titleLabel.text = detail.object(forKey: "title") as? String
             }
             if let descLabel = self.descField {
-                descLabel.text = detail.objectForKey("desc") as? String
+                descLabel.text = detail.object(forKey: "desc") as? String
             }
         }
     }
     
-    func titleFieldDidChange(textField: UITextView){
+    func titleFieldDidChange(_ textField: UITextView){
         let title = textField.text
         if let detail = detailItem as? SKYRecord {
             detailItem?.setValue(title, forKey: "title")
-            SKYContainer.defaultContainer().privateCloudDatabase.saveRecord(detail, completion: { (record, error) in
+            SKYContainer.default().privateCloudDatabase.save(detail, completion: { (record, error) in
                 if(error == nil) {
                     NSLog("OK")
                 } else {
@@ -62,11 +62,11 @@ class DetailViewController: UIViewController {
         
     }
     
-    func descFieldDidChange(textField: UITextView){
+    func descFieldDidChange(_ textField: UITextView){
         let desc = textField.text
         if let detail = detailItem as? SKYRecord {
             detailItem?.setValue(desc, forKey: "desc")
-            SKYContainer.defaultContainer().privateCloudDatabase.saveRecord(detail, completion: { (record, error) in
+            SKYContainer.default().privateCloudDatabase.save(detail, completion: { (record, error) in
                 if(error == nil) {
                     NSLog("OK")
                 } else {

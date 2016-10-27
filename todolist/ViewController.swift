@@ -29,61 +29,61 @@ class ViewController: UIViewController {
     }
     
     func updateLoginStatus() {
-        if ((SKYContainer.defaultContainer().currentUserRecordID) != nil) {
+        if ((SKYContainer.default().currentUserRecordID) != nil) {
             loginStatusLabel.text = "Logged in"
-            loginButton.enabled = false
-            signupButton.enabled = false
-            logoutButton.enabled = true
+            loginButton.isEnabled = false
+            signupButton.isEnabled = false
+            logoutButton.isEnabled = true
         } else {
             loginStatusLabel.text = "Not logged in"
-            loginButton.enabled = true
-            signupButton.enabled = true
-            logoutButton.enabled = false
+            loginButton.isEnabled = true
+            signupButton.isEnabled = true
+            logoutButton.isEnabled = false
         }
     }
     
-    func showAlert(error: NSError) {
-        let alert = UIAlertController(title: "Error", message: error.localizedDescription, preferredStyle: UIAlertControllerStyle.Alert)
-        let action = UIAlertAction(title: "OK", style: .Default, handler: nil)
+    func showAlert(_ error: NSError) {
+        let alert = UIAlertController(title: "Error", message: error.localizedDescription, preferredStyle: UIAlertControllerStyle.alert)
+        let action = UIAlertAction(title: "OK", style: .default, handler: nil)
         alert.addAction(action)
-        self.presentViewController(alert, animated: true, completion: nil)
+        self.present(alert, animated: true, completion: nil)
     }
 
-    @IBAction func didTapLogin(sender: AnyObject) {
+    @IBAction func didTapLogin(_ sender: AnyObject) {
         loginStatusLabel.text = "Loading..."
-        SKYContainer.defaultContainer().loginWithUsername(usernameField.text, password: passwordField.text) { (user, error) in
+        SKYContainer.default().login(withUsername: usernameField.text, password: passwordField.text) { (user, error) in
             if (error != nil) {
-                self.showAlert(error)
+                self.showAlert(error as! NSError)
                 self.updateLoginStatus()
                 return
             }
-            NSLog("Logged in as: %@", user)
+            NSLog("Logged in as: \(user)")
             self.updateLoginStatus()
         }
     }
     
-    @IBAction func didTapSignup(sender: AnyObject) {
+    @IBAction func didTapSignup(_ sender: AnyObject) {
         self.usernameField.resignFirstResponder()
         self.passwordField.resignFirstResponder()
         loginStatusLabel.text = "Loading..."
-        SKYContainer.defaultContainer().signupWithUsername(usernameField.text, password: passwordField.text) { (user, error) in
+        SKYContainer.default().signup(withUsername: usernameField.text, password: passwordField.text) { (user, error) in
             if (error != nil) {
-                self.showAlert(error)
+                self.showAlert(error as! NSError)
                 self.updateLoginStatus()
                 return
             }
-            NSLog("Signed up as: %@", user)
+            NSLog("Signed up as: \(user)")
             self.updateLoginStatus()
         }
     }
     
-    @IBAction func didTapLogout(sender: AnyObject) {
+    @IBAction func didTapLogout(_ sender: AnyObject) {
         self.usernameField.resignFirstResponder()
         self.passwordField.resignFirstResponder()
         loginStatusLabel.text = "Loading..."
-        SKYContainer.defaultContainer().logoutWithCompletionHandler { (user, error) in
+        SKYContainer.default().logout { (user, error) in
             if (error != nil) {
-                self.showAlert(error)
+                self.showAlert(error as! NSError)
                 self.updateLoginStatus()
                 return
             }
