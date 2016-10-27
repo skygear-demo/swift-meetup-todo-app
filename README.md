@@ -1,4 +1,4 @@
-# Todo app guide
+# Todo app guide [in Swift 3]
 
 This document is a guide on how to buld a iOS TODO list app using Skygear with Swift. It contains the following features:
 
@@ -67,11 +67,11 @@ We will use a table view to show the todo items. Create a `UITableViewController
 
 There are a few functions in `TodoTableViewController` we will need to implement:
 
-`func numberOfSectionsInTableView(tableView: UITableView) -> Int`
+`func numberOfSections(in tableView: UITableView) -> Int {`
 
-`func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int`
+`func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int`
 
-`func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell`
+`func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell`
 
 The implementation is already included in the Step 1: [Download Project zip of Step 1](https://github.com/skygear-demo/swift-meetup-todo-app/archive/step1.zip)
 
@@ -115,31 +115,33 @@ To save the todo item record, we will implement the `insertNewObject()`
 We will save the item as a `SKYRecord(recordType: "todo")`, and set its value for each key we wish to save. 
 
 ```
-    func insertNewObject(sender: AnyObject) {
-        let alertController = UIAlertController(title: "Add To-Do item", message: nil, preferredStyle: .Alert)
-        alertController.addAction(UIAlertAction(title: "Cancel", style: .Cancel, handler: nil))
-        alertController.addAction(UIAlertAction(title: "Confirm", style: .Default, handler: { (action) in
+    func insertNewObject(_ sender: AnyObject) {
+        let alertController = UIAlertController(title: "Add Todo item", message: nil, preferredStyle: .alert)
+        alertController.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
+        alertController.addAction(UIAlertAction(title: "Confirm", style: .default, handler: { (action) in
+            
+            // Cloud save
             let title = alertController.textFields![0].text
             let todo = SKYRecord(recordType: "todo")
-            todo.setObject(title!, forKey: "title")
-            todo.setObject(SKYSequence(), forKey: "order")
-            todo.setObject(false, forKey: "done")
+            todo?.setObject(title!, forKey: "title" as NSCopying!)
+            todo?.setObject(SKYSequence(), forKey: "order" as NSCopying!)
+            todo?.setObject(false, forKey: "done" as NSCopying!)
             
-            self.privateDB.saveRecord(todo, completion: { (record, error) in
+            self.privateDB?.save(todo, completion: { (record, error) in
                 if (error != nil) {
                     print("error saving todo: \(error)")
                     return
                 }
                 
-                self.objects.insert(todo, atIndex: 0)
-                let indexPath = NSIndexPath(forRow: 0, inSection: 0)
-                self.tableView.insertRowsAtIndexPaths([indexPath], withRowAnimation: .Automatic)
+                self.objects.insert(todo!, at: 0)
+                let indexPath = IndexPath(row: 0, section: 0)
+                self.tableView.insertRows(at: [indexPath], with: .automatic)
             })
         }))
-        alertController.addTextFieldWithConfigurationHandler { (textField) in
+        alertController.addTextField { (textField) in
             textField.placeholder = "Title"
         }
-        self.presentViewController(alertController, animated: true, completion: nil)
+        self.present(alertController, animated: true, completion: nil)
     }
 
 ```
@@ -159,28 +161,29 @@ It can be achieved with the following code in the `tableView`.
 
 
 ```
- override func tableView(tableView: UITableView, canEditRowAtIndexPath indexPath: NSIndexPath) -> Bool {
+    override func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
         // Return false if you do not want the specified item to be editable.
         return true
     }
 
-    override func tableView(tableView: UITableView, commitEditingStyle editingStyle: UITableViewCellEditingStyle, forRowAtIndexPath indexPath: NSIndexPath) {
-        if editingStyle == .Delete {
-            let todo = objects[indexPath.row] as! SKYRecord
-            todo.setObject(true, forKey: "done")
-            self.privateDB.saveRecord(todo, completion: { (record, error) in
+    override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
+        if editingStyle == .delete {
+            // Delete the row from the data source
+            
+            let todo = objects[(indexPath as NSIndexPath).row] as! SKYRecord
+            todo.setObject(true, forKey: "done" as NSCopying!)
+            self.privateDB?.save(todo, completion: { (record, error) in
                 if (error != nil) {
                     print("error saving todo: \(error)")
                     return
                 }
                 
-                self.objects.removeAtIndex(indexPath.row) as! SKYRecord
-                tableView.deleteRowsAtIndexPaths([indexPath], withRowAnimation: .Fade)
+                self.objects.remove(at: (indexPath as NSIndexPath).row) as! SKYRecord
+                tableView.deleteRows(at: [indexPath], with: .fade)
+                
             })
-        } else if editingStyle == .Insert {
-            // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view.
-        } else {
-            print("Editing \(editingStyle)")
+        } else if editingStyle == .insert {
+            // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
         }
     }
 ```
@@ -220,12 +223,12 @@ The steps are:
 Register in application delegate
 
 ```
-func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
+func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
     some code…
     
     // This will prompt the user for permission to send remote notification
-    application.registerUserNotificationSettings(UIUserNotificationSettings())
-    application.registerForRemoteNotifications()
+        application.registerUserNotificationSettings(UIUserNotificationSettings())
+        application.registerForRemoteNotifications()
     
     return true
 }
@@ -233,30 +236,30 @@ func application(application: UIApplication, didFinishLaunchingWithOptions launc
 
 
 ```
-func application(application: UIApplication, didRegisterForRemoteNotificationsWithDeviceToken deviceToken: NSData) {
+func application(_ application: UIApplication, didRegisterForRemoteNotificationsWithDeviceToken deviceToken: Data) {
     print("Registered for Push notifications with token: \(deviceToken)");
 }
 ```
 
 ```
-SKYContainer.defaultContainer().registerDeviceCompletionHandler { (deviceID, error) in
-        if error != nil {
-            print("Failed to register device: \(error)")
-            return
-        }
-        
-        // You should put subscription creation logic in the following method
-        // self.addSubscription(deviceID)
+SKYContainer.default().registerDeviceCompletionHandler { (deviceID, error) in
+    if error != nil {
+        print("Failed to register device: \(error)")
+        return
     }
+            
+    // You should put subscription creation logic in the following method
+    self.addSubscription(deviceID!)
+}
 ```
 
 Update action
 
 ```
-func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
+    func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
     some code…
     
-    SKYContainer.defaultContainer().delegate = self
+    SKYContainer.default().delegate = self
     
     some code..
 }
@@ -267,29 +270,29 @@ We need to set the AppDelegate to implement `SKYContainerDelegate`
 And we need to implement `didReceiveNotification` in `AppDelegate` 
 
 ```
-func container(container: SKYContainer!, didReceiveNotification notification: SKYNotification!) {
+func container(_ container: SKYContainer!, didReceive notification: SKYNotification!) {
     print("received notification = \(notification)");
-    NSNotificationCenter.defaultCenter().postNotificationName(ReceivedNotificationFromSkygaer, object: notification)
+    NotificationCenter.default.post(name: Notification.Name(rawValue: ReceivedNotificationFromSkygaer), object: notification)
 }
 ```
 
 Add query subscription
 
 ```
-func addSubscription(deviceID: String) {
+func addSubscription(_ deviceID: String) {
     let query = SKYQuery(recordType: "todo", predicate: nil)
     let subscription = SKYSubscription(query: query, subscriptionID: "my todos")
     
     let operation = SKYModifySubscriptionsOperation(deviceID: deviceID, subscriptionsToSave: [subscription])
-    operation.deviceID = deviceID
-    operation.modifySubscriptionsCompletionBlock = { (savedSubscriptions, operationError) in
-        dispatch_async(dispatch_get_main_queue()) {
+    operation?.deviceID = deviceID
+    operation?.modifySubscriptionsCompletionBlock = { (savedSubscriptions, operationError) in
+        DispatchQueue.main.async {
             if operationError != nil {
                 print(operationError)
             }
         }
     };
-    SKYContainer.defaultContainer().privateCloudDatabase.executeOperation(operation)
+    SKYContainer.default().privateCloudDatabase.execute(operation)
 }
 ```
 
@@ -299,7 +302,7 @@ In `TodoTableViewController`, let's tell the table view controller to update the
 override func viewDidLoad() {
     some code...
     
-    NSNotificationCenter.defaultCenter().addObserverForName(ReceivedNotificationFromSkygaer, object: nil, queue: NSOperationQueue.mainQueue()) { (notification) in
+    NotificationCenter.default.addObserver(forName: NSNotification.Name(rawValue: ReceivedNotificationFromSkygaer), object: nil, queue: OperationQueue.main) { (notification) in
         self.updateData()
     }
     
